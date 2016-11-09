@@ -45,6 +45,8 @@
         #video.tab-pane.active
           .kiosk
           = render partial: 'frontend/shared/videoplayer', locals: { height: aspect_ratio_height, width: aspect_ratio_width, video_recordings: @event.videos_sorted_by_language, subtitle_tracks: @subtitle_tracks, poster_url: @event.poster_url, event_id: @event.id }
+          - if @conference.metadata['subtitles'].present?
+            %a{href: 'https://www.c3subtitles.de/talk/guid/' +  @event.guid} Add or edit subtitles
 
       - if @audio_recordings.present?
         #audio.tab-pane{class: ('active' unless @video_recordings.present?)}
