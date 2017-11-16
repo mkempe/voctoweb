@@ -42,6 +42,11 @@
         .player.audio
           = render partial: 'frontend/shared/audioplayer', locals: { event: @event }
 
+      - else
+        .player.video
+          .kiosk
+          = render partial: 'frontend/shared/reliveplayer', locals: { height: aspect_ratio_height, width: aspect_ratio_width, event: @event }
+
     %ul.metadata
       %li
         %span.icon.icon-clock-o
