@@ -53,13 +53,13 @@ Vagrant.configure(2) do |config|
   # Example for VirtualBox:
   #
   config.vm.provider "virtualbox" do |vb|
-  #   # Display the VirtualBox GUI when booting the machine
-  #   vb.gui = true
-  #
-     # Customize the amount of memory on the VM:
-     vb.memory = "4096"
-     vb.cpus = 4
-     vb.name = "voctoweb-dev"
+    # Display the VirtualBox GUI when booting the machine
+    # vb.gui = true
+
+    # Customize the amount of memory on the VM:
+    vb.memory = "4096"
+    vb.cpus   = 4
+    vb.name   = "voctoweb-dev"
   end
   #
   # View the documentation for the provider you are using for more
@@ -138,27 +138,27 @@ UNIT
     # nginx
     tee /etc/nginx/sites-enabled/default <<NGINX
 upstream puma {
-	server localhost:3000;
+  server localhost:3000;
 }
 
 server {
-	listen 80 default_server;
-	listen [::]:80 default_server;
-	server_name _;
-	root /vagrant/public;
-	location @puma {
-		set \\$remote_addr_v4 \\$remote_addr;
-		if (\\$remote_addr ~* ^::ffff:(.*)) {
-			set \\$remote_addr_v4 \\$1;
-		}
-		proxy_set_header  X-Forwarded-For \\$remote_addr_v4;
-		proxy_set_header  X-Forwarded-Proto \\$scheme;
-		proxy_set_header  X-Real-IP  \\$remote_addr;
-		proxy_set_header  Host \\$http_host;
-		proxy_redirect    off;
-		proxy_pass        http://puma;
-	}
-	try_files /system/maintenance.html \\$uri \\$uri/index.html \\$uri.html @puma;
+  listen 80 default_server;
+  listen [::]:80 default_server;
+  server_name _;
+  root /vagrant/public;
+  location @puma {
+    set \\$remote_addr_v4 \\$remote_addr;
+    if (\\$remote_addr ~* ^::ffff:(.*)) {
+      set \\$remote_addr_v4 \\$1;
+    }
+    proxy_set_header  X-Forwarded-For \\$remote_addr_v4;
+    proxy_set_header  X-Forwarded-Proto \\$scheme;
+    proxy_set_header  X-Real-IP  \\$remote_addr;
+    proxy_set_header  Host \\$http_host;
+    proxy_redirect    off;
+    proxy_pass        http://puma;
+  }
+  try_files /system/maintenance.html \\$uri \\$uri/index.html \\$uri.html @puma;
 }
 NGINX
     systemctl enable --now nginx
